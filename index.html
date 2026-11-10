@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pulse · Campaign Anomaly Alerting</title>
+<meta name="description" content="Pulse: incident-first anomaly alerting for ad campaigns. Prototype for the Media.net APM case study by Shubham Meena.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23101828'/%3E%3Cpath d='M4 17h6l3-8 5 15 3-7h7' stroke='%2322c55e' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=1">
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <svg viewBox="0 0 32 32" class="logo" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#101828"/><path d="M4 17h6l3-8 5 15 3-7h7" stroke="#22c55e" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <div><b>Pulse</b><span class="sub">Incident-first alerting for ad campaigns</span></div>
+  </div>
+  <nav class="tabs" role="tablist">
+    <button class="tab-btn active" data-tab="live">Live incidents</button>
+    <button class="tab-btn" data-tab="tune">Thresholds &amp; backtest</button>
+    <button class="tab-btn" data-tab="notify">Notifications</button>
+    <button class="tab-btn" data-tab="how">How it works</button>
+  </nav>
+  <div class="clock" id="clock"></div>
+</header>
+
+<section class="kpis" id="kpis"></section>
+<div id="banner"></div>
+
+<main>
+  <section id="tab-live" class="tab active">
+    <aside class="left">
+      <div class="card">
+        <div class="row-between"><h3>Open incidents</h3><span class="muted small" id="incCount"></span></div>
+        <div id="incList"></div>
+      </div>
+      <div class="card lab">
+        <h3>Scenario lab</h3>
+        <p class="muted small">Inject a real-world failure into the live data and watch Pulse respond.</p>
+        <div id="scenarios" class="scen"></div>
+        <div class="toggles">
+          <label class="tg"><input type="checkbox" id="tgCal"> <span>Context calendar: <b>Retail sale day</b> today</span></label>
+          <label class="tg"><input type="checkbox" id="tgFresh" checked> <span>Data-freshness guard</span></label>
+        </div>
+      </div>
+      <div class="card noise" id="noise"></div>
+    </aside>
+    <section class="detail card" id="detail"></section>
+  </section>
+
+  <section id="tab-tune" class="tab"></section>
+  <section id="tab-notify" class="tab"></section>
+  <section id="tab-how" class="tab"></section>
+</main>
+
+<div id="modal" class="modal hidden" role="dialog" aria-modal="true"></div>
+<div id="toast" class="toast"></div>
+
+<footer>
+  Prototype by <b>Shubham Meena</b> for the Media.net APM case study · 124 campaigns, 14 days of hourly data, all simulated in your browser · no backend
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="app.js?v=1"></script>
+</body>
+</html>
