@@ -3,7 +3,7 @@
 Prototype for the **Media.net Associate Product Manager case study** (topic: *alerting system for anomalies in ad campaign performance*).
 Built by **Shubham Meena**, IIM Lucknow.
 
-**Live demo:** `https://<your-github-username>.github.io/medianet-pulse/`
+**Live demo:** `https://goku-143.github.io/medianet-pulse/`
 
 ## The problem
 Campaign teams don't need *more* alerts. Static rules ("alert if a metric moves ±30%") fire thousands of times a week, most of them noise, so people mute them, and the costly problems (a broken pixel, bot traffic, a runaway budget) slip through for hours.
