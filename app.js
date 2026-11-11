@@ -940,4 +940,11 @@ document.addEventListener('input', e => {
   clearTimeout(slT); slT = setTimeout(() => { runBacktest(k !== 'k' && k !== 'p1' && k !== 'p2' ? true : false); recompute(); }, 120);
 });
 
+// Deep links, e.g. ?sc=DELAY&fresh=0  ?sc=SALE&cal=1  ?tab=tune  ?sel=CONV_ZERO
+const Q = new URLSearchParams(location.search);
+(Q.get('sc') || '').split(',').forEach(k => { if (SCENARIOS[k] && !S.live.includes(k)) S.live.push(k); });
+if (Q.get('cal') === '1') S.calendar = true;
+if (Q.get('fresh') === '0') S.P.freshness = false;
 recompute();
+if (Q.get('sel')) { const i = S.res.list.find(x => x.type === Q.get('sel')); if (i) { S.sel = i.key; render(); } }
+if (Q.get('tab')) { const b = document.querySelector(`[data-tab="${Q.get('tab')}"]`); if (b) b.click(); }
