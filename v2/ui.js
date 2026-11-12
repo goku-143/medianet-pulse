@@ -234,7 +234,21 @@ const TIPS = {
   'pv.slack': ['What the team chat message looks like for the selected incident.', 'One thread per problem. Updates go in the thread, not as new messages.'],
   'pv.sms': ['The text message the on-call person gets, for P1 only.', 'Short, with one link to act.'],
   'pv.digest': ['The 09:00 email with slow-moving issues.', 'Small issues are still seen, without interruptions.'],
-  'rules': ['The five failure patterns Pulse looks for, and the exact test for each.', 'Clear rules can be checked and explained to a client.']
+  'rules': ['The five failure patterns Pulse looks for, and the exact test for each.', 'Clear rules can be checked and explained to a client.'],
+  'th.r.sev': ['Severity: how urgent a problem is, from P1 (urgent) to P3 (slow).', 'Each level gets a different channel, so urgency matches the interruption.'],
+  'th.r.chan': ['Channel: where the alert is sent, such as team chat, a text message or email.', 'Urgent problems use a channel people see at once.'],
+  'th.r.when': ['When: how fast the alert goes out after Pulse finds the problem.', 'Small problems wait for a batch, so they do not interrupt.'],
+  'th.r.esc': ['Escalation: who is told next if nobody responds in time.', 'A real problem is never left unread.'],
+  'th.r.night': ['At night: what happens outside working hours.', 'Only problems worth waking someone for wake someone.'],
+  'th.b.when': ['When: the hour the planted problem started in the past data.', 'Lets you check how fast Pulse found it.'],
+  'th.b.what': ['What happened: the real problem planted in the test data, and how many campaigns it hit.', 'This is the answer key the test is scored against.'],
+  'th.b.called': ['Pulse called it: the cause Pulse named for the incident.', 'Shows Pulse names the right cause, not just that something moved.'],
+  'th.b.caught': ['Caught: whether Pulse raised an incident for this problem, and at what severity.', 'A missed problem is the most costly failure.'],
+  'th.b.after': ['Found after: hours from the start of the problem to the alert.', 'Every hour of delay is money lost.'],
+  'th.h.prob': ['Problem: one of the five failure patterns Pulse looks for.', 'Each pattern has its own test, so each alert has a clear reason.'],
+  'th.h.when': ['Pulse alerts when: the exact test that must pass before Pulse alerts.', 'A clear test can be checked and explained to a client.'],
+  'th.h.group': ['Grouped by: the shared thing used to merge many campaigns into one incident.', 'One cause becomes one incident, not dozens of alerts.'],
+  'th.h.risk': ['Money at risk: how Pulse counts the dollars lost each hour for this problem.', 'This sets the priority, so costly problems come first.']
 };
 const tipAttr = (k, focus = true) => ` data-tip="${k}"${focus ? ' tabindex="0"' : ''}`;
 
@@ -443,7 +457,7 @@ function renderNotify() {
   $('#tab-notify').innerHTML = `<div class="page">
     <div class="page-head"><h1>Who hears about a problem, and how fast</h1><p>Severity decides the channel. Severity is money at risk per hour, adjusted for how sure Pulse is. One problem gets one message thread; updates go into that thread.</p></div>
     <div class="block"><h2${tipAttr('routing')}>Routing rules</h2><p class="lede">P1 at ${money(S.P.p1)} an hour or more. P2 at ${money(S.P.p2)} or more. Everything smaller is P3.</p>
-      <div class="tbl-wrap"><table><thead><tr><th>Severity</th><th>Channel</th><th>When</th><th class="hide-sm">Escalation</th><th class="hide-sm">At night</th></tr></thead>
+      <div class="tbl-wrap"><table><thead><tr><th${tipAttr('th.r.sev')}><span>Severity</span></th><th${tipAttr('th.r.chan')}><span>Channel</span></th><th${tipAttr('th.r.when')}><span>When</span></th><th class="hide-sm"${tipAttr('th.r.esc')}><span>Escalation</span></th><th class="hide-sm"${tipAttr('th.r.night')}><span>At night</span></th></tr></thead>
       <tbody>${['P1', 'P2', 'P3', 'Info'].map(s => `<tr><td>${sevBadge(s)}</td><td>${ROUTING[s][0]}</td><td>${ROUTING[s][1]}</td><td class="hide-sm">${ROUTING[s][2]}</td><td class="hide-sm">${ROUTING[s][3]}</td></tr>`).join('')}</tbody></table></div></div>
     <div class="block"><h2>Message previews</h2><p class="lede">For the incident selected on the live screen${inc ? `: ${esc(title(inc))}` : ''}.</p>
       <div class="previews">
@@ -505,7 +519,7 @@ function runBacktest(withCurve) {
     <div class="metric"${tipAttr('bt.ttd')}><div class="l"><span>Time to detect</span></div><div class="v">${bt.ttdMed != null ? bt.ttdMed + ' h' : 'None'}</div><div class="s">median, from the start</div></div>
     <div class="metric"${tipAttr('bt.week')}><div class="l"><span>Incidents a week</span></div><div class="v mag">${bt.perWeek.toFixed(0)}</div><div class="s">across ${CS.length} campaigns</div></div>
     <div class="metric"${tipAttr('bt.naive')}><div class="l"><span>Simple-rule alerts a week</span></div><div class="v">${num(bt.naivePerWeek)}</div><div class="s">${pct(bt.naivePrecision)} of them real</div></div>`;
-  $('#btTable').innerHTML = `<thead><tr><th>When</th><th>What happened</th><th class="hide-sm">Pulse called it</th><th>Caught</th><th class="n">Found after</th></tr></thead><tbody>${bt.truth.map(e => `<tr><td>${tLabel(e.s)}</td><td>${esc(e.what)}<span class="sub">${resolveScope(e.scope).length} campaigns</span></td><td class="hide-sm">${KIND[e.hitType || FAMILY[e.type]]}</td><td>${e.hit !== null ? `<span class="okc">Yes, ${e.hitSev}</span>` : '<span class="down">Missed</span>'}</td><td class="n">${e.hit !== null ? (e.hit - e.s + 1) + ' h' : 'None'}</td></tr>`).join('')}</tbody>`;
+  $('#btTable').innerHTML = `<thead><tr><th${tipAttr('th.b.when')}><span>When</span></th><th${tipAttr('th.b.what')}><span>What happened</span></th><th class="hide-sm"${tipAttr('th.b.called')}><span>Pulse called it</span></th><th${tipAttr('th.b.caught')}><span>Caught</span></th><th class="n"${tipAttr('th.b.after')}><span>Found after</span></th></tr></thead><tbody>${bt.truth.map(e => `<tr><td>${tLabel(e.s)}</td><td>${esc(e.what)}<span class="sub">${resolveScope(e.scope).length} campaigns</span></td><td class="hide-sm">${KIND[e.hitType || FAMILY[e.type]]}</td><td>${e.hit !== null ? `<span class="okc">Yes, ${e.hitSev}</span>` : '<span class="down">Missed</span>'}</td><td class="n">${e.hit !== null ? (e.hit - e.s + 1) + ' h' : 'None'}</td></tr>`).join('')}</tbody>`;
   if (withCurve || !S.curve) { S.curve = [1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5].map(k => { const b = backtest({ ...S.P, k }); return { k, recall: b.recall, precision: b.precision, perWeek: b.perWeek }; }); }
   drawCurve();
 }
@@ -544,7 +558,7 @@ function renderHow() {
     <div class="block"><h2>The pipeline</h2>${flowHTML()}</div>
     <div class="block"><h2>Before and after</h2><p class="lede">One week of the same simulated data. On the left, each small dot is 10 alerts from a simple rule. On the right, each dot is one Pulse incident.</p>${baSVG(b.naivePerWeek, b.perWeek, true)}</div>
     <div class="block"><h2${tipAttr('rules')}>The five failure patterns</h2><p class="lede">Each pattern has its own fingerprint in the data. All of them also need: enough volume to judge, ${S.P.persist} hours of persistence and at least ${money(S.P.minRisk)} an hour at risk.</p>
-      <div class="tbl-wrap"><table><thead><tr><th>Problem</th><th>Pulse alerts when</th><th class="hide-sm">Grouped by</th><th class="hide-sm">Money at risk means</th></tr></thead><tbody>
+      <div class="tbl-wrap"><table><thead><tr><th${tipAttr('th.h.prob')}><span>Problem</span></th><th${tipAttr('th.h.when')}><span>Pulse alerts when</span></th><th class="hide-sm"${tipAttr('th.h.group')}><span>Grouped by</span></th><th class="hide-sm"${tipAttr('th.h.risk')}><span>Money at risk means</span></th></tr></thead><tbody>
         <tr><td><b>Sales tracking stopped</b></td><td>Zero sales while clicks are at least half of normal, and about 12 or more sales were expected</td><td class="hide-sm">Tracking tag, then advertiser</td><td class="hide-sm">Spend running with no sales data</td></tr>
         <tr><td><b>Likely bot clicks</b></td><td>Clicks per ad view at least 1.6 times normal and sales per click at most 0.65 times normal</td><td class="hide-sm">Publisher group</td><td class="hide-sm">Extra clicks times cost per click</td></tr>
         <tr><td><b>Overspending</b></td><td>Spend at least 1.5 times the normal level for this hour</td><td class="hide-sm">Advertiser, then publisher group</td><td class="hide-sm">Spend above normal</td></tr>
@@ -561,16 +575,16 @@ function renderHow() {
         <li><b>Hourly.</b> Reporting lands hourly. Faster checks would mostly add noise on small numbers.</li></ul></div>
       <div class="prose"><h2>How success is measured</h2><ul>
         <li><b>Main goal:</b> money protected per account per month (waste stopped plus delivery recovered).</li>
-        <li><b>Quality:</b> at least 70% of incidents marked useful; at least 90% of known problems caught.</li>
+        <li><b>Quality:</b> at least 70% of incidents marked useful in the test (85% at full launch); at least 90% of known problems caught.</li>
         <li><b>Speed:</b> median 2 hours or less to detect; 30 minutes or less to act on a P1.</li>
         <li><b>Guardrails:</b> fewer than 3 interruptions per account manager per day; fewer than 5% of people muting Pulse.</li></ul></div>
     </div>
     <div class="block two">
       <div class="prose"><h2>Rollout</h2><ul>
         <li><b>Weeks 0 to 2, replay:</b> run on 90 days of real history and tune settings per industry.</li>
-        <li><b>Weeks 3 to 4, silent:</b> live but sends nothing; account managers rate incidents daily.</li>
-        <li><b>Weeks 5 to 8, test:</b> 20% of managed accounts, chosen at random; compare time to detect and money lost with the rest.</li>
-        <li><b>Week 9 onward:</b> all accounts, then self-serve advertisers with P1 alerts only.</li></ul></div>
+        <li><b>Weeks 3 to 4, silent:</b> live but sends nothing; 10 account managers rate incidents daily.</li>
+        <li><b>Weeks 5 to 10, test:</b> 20% of managed accounts, chosen at random by account; compare money lost per incident with the rest.</li>
+        <li><b>Week 11 onward:</b> all managed accounts, then self-serve advertisers with P1 alerts only.</li></ul></div>
       <div class="prose"><h2>Edge cases handled</h2><ul>
         <li><b>Late data:</b> data completeness check. Try "Reporting delay" in the scenario lab.</li>
         <li><b>Planned spikes:</b> calendar. Try "Planned retail sale".</li>
