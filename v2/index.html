@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pulse: campaign problem alerts</title>
+<meta name="description" content="Pulse finds costly problems in ad campaigns, groups them by cause and ranks them by money at risk. Guided version of the Media.net APM case prototype.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23111111'/%3E%3Cpath d='M4 17h6l3-8 5 15 3-7h7' stroke='%23D51254' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=3">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <div class="brand">
+    <svg viewBox="0 0 32 32" class="logo" aria-hidden="true"><rect width="32" height="32" rx="6" fill="#111"/><path d="M4 17h6l3-8 5 15 3-7h7" stroke="#D51254" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <div><b>Pulse</b><span>Problem alerts for ad campaigns</span></div>
+  </div>
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button class="tab-btn" role="tab" data-tab="live" data-tip="tab.live" aria-selected="true">Live incidents</button>
+    <button class="tab-btn" role="tab" data-tab="cases" data-tip="tab.cases" aria-selected="false">Use cases</button>
+    <button class="tab-btn" role="tab" data-tab="tune" data-tip="tab.tune" aria-selected="false">Thresholds &amp; backtest</button>
+    <button class="tab-btn" role="tab" data-tab="notify" data-tip="tab.notify" aria-selected="false">Notifications</button>
+    <button class="tab-btn" role="tab" data-tab="how" data-tip="tab.how" aria-selected="false">How it works</button>
+  </nav>
+  <div class="tools">
+    <button class="tool" id="tourBtn" data-tip="tool.tour">Tour</button>
+    <button class="tool" id="explainBtn" aria-pressed="false" data-tip="tool.explain"><span class="q" aria-hidden="true">?</span>Explain</button>
+    <a class="tool quiet" href="../" data-tip="tool.classic">Classic view</a>
+  </div>
+</header>
+<div id="offer"></div>
+
+<main id="main">
+  <section id="tab-live" class="tab active" role="tabpanel" aria-label="Live incidents">
+    <div class="status" id="status"></div>
+    <div class="metrics" id="metrics"></div>
+    <div id="banner"></div>
+    <div class="live-grid">
+      <aside class="rail">
+        <div class="queue-head"><h2 data-tip="queue" tabindex="0">Open incidents</h2><span id="incCount" class="meta"></span></div>
+        <ol id="queue" class="queue" aria-label="Open incidents, most costly first"></ol>
+        <div class="lab" id="lab">
+          <h3 data-tip="lab" tabindex="0">Scenario lab</h3>
+          <p class="meta">Add a real-world failure to today's data and watch Pulse respond.</p>
+          <div id="scenarios" class="scen"></div>
+          <div class="toggles">
+            <label class="tg" data-tip="toggle.cal"><input type="checkbox" id="tgCal"><span>Calendar: retail sale planned today</span></label>
+            <label class="tg" data-tip="toggle.fresh"><input type="checkbox" id="tgFresh" checked><span>Data completeness check</span></label>
+          </div>
+        </div>
+        <div class="noise" id="noise"></div>
+      </aside>
+      <section class="detail" id="detail" aria-live="polite"></section>
+    </div>
+  </section>
+  <section id="tab-cases" class="tab" role="tabpanel" aria-label="Use cases"></section>
+  <section id="tab-tune" class="tab" role="tabpanel" aria-label="Thresholds and backtest"></section>
+  <section id="tab-notify" class="tab" role="tabpanel" aria-label="Notifications"></section>
+  <section id="tab-how" class="tab" role="tabpanel" aria-label="How it works"></section>
+</main>
+
+<footer>
+  <span>Prototype by Shubham Meena for the Media.net APM case study.</span>
+  <span>All data is simulated in your browser: 124 campaigns, 12 advertisers, 14 days of hourly data. No backend.</span>
+</footer>
+
+<div id="tip" role="tooltip" class="tip" hidden></div>
+<div id="xm-layer" class="xm-layer" aria-hidden="true"></div>
+<aside id="xpanel" class="xpanel" hidden aria-label="Explain mode"></aside>
+<div id="tour" class="tour" hidden></div>
+<div id="modal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="mTitle"></div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="engine.js?v=1"></script>
+<script src="ui.js?v=4"></script>
+</body>
+</html>
